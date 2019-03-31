@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Gaben Store</string>
+    <string name="title_game_name">Game title</string>
+    <string name="title_game_price">Price</string>
+    <string name="title_game_count">Count</string>
+    <string name="title_game_description">Game description</string>
+    <string name="button_buy">Buy game</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
