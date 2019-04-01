@@ -1,7 +1,6 @@
 package com.kokhan.gabenstore;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -40,7 +39,7 @@ public class GameInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final MainActivity activity = (MainActivity) getActivity();
-//        new CartRecyclerViewAdapter(getActivity(), CartEntity.getInstance().getGameList());
+//        new CartRecyclerViewAdapter(getActivity(), DataStorage.getInstance().getCartGameList());
         int gamePosition = getArguments().getInt("gamePosition");
         boolean isFromCart = getArguments().getBoolean("isFromCart");
         View view = inflater.inflate(R.layout.fragment_gameinfo, container, false);
@@ -52,15 +51,17 @@ public class GameInfoFragment extends Fragment {
         img = (ImageView) view.findViewById(R.id.productthumbnail);
         btnbuy = (AppCompatButton) view.findViewById(R.id.buy_button);
         numberPicker = (NumberPicker) view.findViewById(R.id.game_number_picker);
+        //numberPicker.setKeyboardNavigationCluster(false);
 
         final Game currentGame;
-        if(isFromCart){
+        if (isFromCart) {
             btnbuy.setVisibility(View.GONE);
             numberPicker.setVisibility(View.GONE);
-            currentGame = CartEntity.getInstance().getGameList().get(gamePosition);
+            currentGame = DataStorage.getInstance().getCartGameList().get(gamePosition);
         } else {
-            currentGame = GamesDatasource.getInstance().getGameList().get(gamePosition);
+            currentGame = DataStorage.getInstance().getCatalogGameList().get(gamePosition);
         }
+
         String title = currentGame.getTitle();
         String description = currentGame.getDescription();
         int price = currentGame.getPrice();
@@ -70,7 +71,7 @@ public class GameInfoFragment extends Fragment {
         View.OnClickListener onClickListenerBuyBtn = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currentGame.getCount() <= 0) {
+                if (currentGame.getCount() <= 0) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                     builder.setMessage("We haven't this game. Sorry :c");
                     AlertDialog alertDialog = builder.create();
@@ -78,24 +79,19 @@ public class GameInfoFragment extends Fragment {
                 } else {
                     int addedGameCount = numberPicker.getValue();
                     Game addedGame = new Game(currentGame.getTitle(), currentGame.getDescription(),
-                    currentGame.getThumbnail(), addedGameCount, currentGame.getPrice());
-                    CartEntity.getInstance().getGameList().add(addedGame);
-                    AHBottomNavigation navigation = (AHBottomNavigation) activity.findViewById(R.id.bottom_navigation);
-                    navigation.setNotification(CartEntity.getInstance().getGameList().size(), 1);
+                            currentGame.getThumbnail(), addedGameCount, currentGame.getPrice());
+                    DataStorage.getInstance().getCartGameList().add(addedGame);
                     currentGame.setCount(currentGame.getCount() - addedGameCount);
                     tvcount.setText(COUNT_CONSTANT.concat(String.valueOf(currentGame.getCount())));
-                    if(currentGame.getCount() == 0) {
-                        numberPicker.setMaxValue(1);
-                    } else {
-                        numberPicker.setMaxValue(currentGame.getCount());
-                    }
-
-//                adapter.notifyDataSetChanged();
+                    AHBottomNavigation navigation = (AHBottomNavigation) activity.findViewById(R.id.bottom_navigation);
+                    navigation.setNotification(DataStorage.getInstance().getCartGameList().size(), 1);
+                    setNumberPickerValue(currentGame.getCount());
+                    //adapter.notifyDataSetChanged();
                 }
             }
         };
-
         btnbuy.setOnClickListener(onClickListenerBuyBtn);
+
 
         tvtitle.setText(title);
         tvdescription.setText(description);
@@ -103,12 +99,15 @@ public class GameInfoFragment extends Fragment {
         tvprice.setText(PRICE_CONSTANT.concat(String.valueOf(price).concat("$")));
         img.setImageResource(image);
         numberPicker.setMinValue(1);
-        if(currentGame.getCount() == 0) {
+        setNumberPickerValue(currentGame.getCount());
+        return view;
+    }
+
+    private void setNumberPickerValue(int gameCount) {
+        if (gameCount == 0) {
             numberPicker.setMaxValue(1);
         } else {
-            numberPicker.setMaxValue(currentGame.getCount());
+            numberPicker.setMaxValue(gameCount);
         }
-
-        return view;
     }
 }

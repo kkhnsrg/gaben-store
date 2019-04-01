@@ -9,12 +9,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
-
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerViewAdapter.SpecialViewHolder> {
@@ -64,7 +61,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
 
     public void removeItem(int position){
         Game removedGame = mData.get(position);
-        GamesDatasource.getInstance().addExistingGame(removedGame);
+        DataStorage.getInstance().addExistingGameToCatalog(removedGame);
         mData.remove(removedGame);
         notifyItemRemoved(position);
     }

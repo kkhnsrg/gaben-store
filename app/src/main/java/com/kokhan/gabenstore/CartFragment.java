@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -41,7 +39,7 @@ public class CartFragment extends Fragment implements RecyclerItemTouchHelperLis
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         activity = (MainActivity) getActivity();
-        gameList = CartEntity.getInstance().getGameList();
+        gameList = DataStorage.getInstance().getCartGameList();
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.cart_recyclerview_id);
@@ -66,7 +64,7 @@ public class CartFragment extends Fragment implements RecyclerItemTouchHelperLis
             adapter.removeItem(deleteIndex);
 
             AHBottomNavigation navigation = (AHBottomNavigation) activity.findViewById(R.id.bottom_navigation);
-            navigation.setNotification(CartEntity.getInstance().getGameList().size(), 1);
+            navigation.setNotification(DataStorage.getInstance().getCartGameList().size(), 1);
         }
     }
 }

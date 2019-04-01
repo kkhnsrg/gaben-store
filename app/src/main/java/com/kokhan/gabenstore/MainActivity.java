@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentTransaction;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.RelativeLayout;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
@@ -41,11 +40,6 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation.addItem(item1);
         bottomNavigation.addItem(item2);
 
-//        bottomNavigation.setBehaviorTranslationEnabled(false);
-
-//        bottomNavigation.setTranslucentNavigationEnabled(true);
-
-
         bottomNavigation.setColored(true);
 
         bottomNavigation.setDefaultBackgroundColor(R.color.colorPrimary);
@@ -56,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigation.setCurrentItem(0);
 
-        bottomNavigation.setNotification(CartEntity.getInstance().getGameList().size(), 1);
+        bottomNavigation.setNotification(DataStorage.getInstance().getCartGameList().size(), 1);
 
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
