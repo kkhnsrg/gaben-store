@@ -1,4 +1,4 @@
-package com.kokhan.gabenstore;
+package com.kokhan.gabenstore.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -11,8 +11,12 @@ import android.os.Bundle;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.kokhan.gabenstore.fragment.CartFragment;
+import com.kokhan.gabenstore.fragment.CatalogFragment;
+import com.kokhan.gabenstore.data.DataStorage;
+import com.kokhan.gabenstore.R;
 
-public class MainActivity extends AppCompatActivity {
+public class AppActivity extends AppCompatActivity {
 
     CatalogFragment catalogFragment;
     CartFragment cartFragment;

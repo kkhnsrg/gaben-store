@@ -4,7 +4,16 @@
     android:id="@+id/cart_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CartFragment">
+    tools:context=".fragment.CartFragment">
+        <TextView
+            android:id="@+id/empty_cart_view"
+            android:textColor="#2d2d2d"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:text="@string/title_empty_cart"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cart_recyclerview_id"

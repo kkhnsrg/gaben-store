@@ -1,4 +1,4 @@
-package com.kokhan.gabenstore;
+package com.kokhan.gabenstore.fragment;
 
 
 import android.os.Bundle;
@@ -15,6 +15,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.kokhan.gabenstore.data.DataStorage;
+import com.kokhan.gabenstore.data.Game;
+import com.kokhan.gabenstore.R;
+import com.kokhan.gabenstore.adapter.CatalogRecyclerViewAdapter;
 
 import java.util.List;
 
@@ -24,8 +30,7 @@ import java.util.List;
  */
 public class CatalogFragment extends Fragment {
 
-    CatalogRecyclerViewAdapter adapter;
-    Menu menu;
+    private CatalogRecyclerViewAdapter adapter;
 
     public CatalogFragment() {
     }
@@ -35,7 +40,9 @@ public class CatalogFragment extends Fragment {
                              Bundle savedInstanceState) {
         List<Game> gameList = DataStorage.getInstance().getCatalogGameList();
         View view = inflater.inflate(R.layout.fragment_catalog, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.catalog_recyclerview_id);
+        //    private TextView tvEmptySearch;
+        RecyclerView recyclerView = view.findViewById(R.id.catalog_recyclerview_id);
+//        tvEmptySearch = (TextView) view.findViewById(R.id.empty_search_result);
         adapter = new CatalogRecyclerViewAdapter(this.getContext(), gameList);
         recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 3));
         recyclerView.setAdapter(adapter);
@@ -46,7 +53,6 @@ public class CatalogFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.search_menu, menu);
-        this.menu = menu;
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -57,10 +63,10 @@ public class CatalogFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                //emptysearch show
                 adapter.getFilter().filter(newText);
                 return false;
             }
         });
-        super.onCreateOptionsMenu(menu, inflater);
     }
 }

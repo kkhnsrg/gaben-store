@@ -19,7 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:scaleType="fitXY"
-            android:background="#2d2d2d"/>
+            android:background="#2d2d2d"
+            android:src="@drawable/joystick_vector"/>
 
         <TextView
             android:id="@+id/game_name_id"

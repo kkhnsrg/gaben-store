@@ -1,4 +1,4 @@
-package com.kokhan.gabenstore;
+package com.kokhan.gabenstore.data;
 
 public class Game {
 

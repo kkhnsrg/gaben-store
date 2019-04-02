@@ -1,4 +1,6 @@
-package com.kokhan.gabenstore;
+package com.kokhan.gabenstore.data;
+
+import com.kokhan.gabenstore.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +8,6 @@ import java.util.List;
 public final class DataStorage {
     private final List<Game> cartGameList;
     private final List<Game> catalogGameList;
-
 
     private static final DataStorage ourInstance = new DataStorage();
 
@@ -38,7 +39,6 @@ public final class DataStorage {
         catalogGameList.add(new Game("The Elder Scrolls V: Skyrim", "The Elder Scrolls V: Skyrim is an action role-playing game, playable from either a first or third-person perspective. The player may freely roam over the land of Skyrim which is an open world environment consisting of wilderness expanses, dungeons, cities, towns, fortresses, and villages.", R.drawable.skyrim, 7, 20));
         catalogGameList.add(new Game("The Witcher 3: Wild Hunt", "The Witcher 3: Wild Hunt is a story-driven, next-generation open world role-playing game, set in a visually stunning fantasy universe, full of meaningful choices and impactful consequences. You play as Geralt of Rivia, a monster hunter tasked with finding a child from an ancient prophecy.", R.drawable.witcher3, 25, 26));
         catalogGameList.add(new Game("Wolfenstein", "Wolfenstein is a series of World War II-themed video games created by Muse Software. In 2001, the series was rebooted with Return to Castle Wolfenstein, developed by Gray Matter Interactive. It was followed in 2003 by Wolfenstein: Enemy Territory, by Splash Damage. Raven Software's Wolfenstein followed in 2009.", R.drawable.wolfenstein, 11, 17));
-
     }
 
     public List<Game> getCartGameList() {
@@ -49,12 +49,4 @@ public final class DataStorage {
         return catalogGameList;
     }
 
-    public void addExistingGameToCatalog(Game game) {
-        for (Game currentGame : catalogGameList) {
-            if (currentGame.getTitle().equals(game.getTitle())) {
-                currentGame.setCount(currentGame.getCount() + game.getCount());
-                break;
-            }
-        }
-    }
 }

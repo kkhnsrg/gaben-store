@@ -1,4 +1,4 @@
-package com.kokhan.gabenstore;
+package com.kokhan.gabenstore.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +10,11 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kokhan.gabenstore.data.Game;
+import com.kokhan.gabenstore.fragment.GameInfoFragment;
+import com.kokhan.gabenstore.R;
+import com.kokhan.gabenstore.activity.AppActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +23,9 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class CatalogRecyclerViewAdapter extends RecyclerView.Adapter<CatalogRecyclerViewAdapter.SpecialViewHolder> implements Filterable {
+
+    private static String GAME_POSITION = "gamePosition";
+    private static String IS_FROM_CART = "isFromCart";
 
     private Context mContext;
 
@@ -40,21 +48,21 @@ public class CatalogRecyclerViewAdapter extends RecyclerView.Adapter<CatalogRecy
 
     @Override
     public void onBindViewHolder(@NonNull final SpecialViewHolder holder, final int position) {
-        holder.tv_product_title.setText(gameList.get(position).getTitle());
-        holder.img_product_thumbnail.setImageResource(gameList.get(position).getThumbnail());
+        holder.tvGameTitle.setText(gameList.get(position).getTitle());
+        holder.imgGameThumbnail.setImageResource(gameList.get(position).getThumbnail());
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             //lambda
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("gamePosition", position);
-                bundle.putBoolean("isFromCart", false);
+                bundle.putInt(GAME_POSITION, position);
+                bundle.putBoolean(IS_FROM_CART, false);
 
                 GameInfoFragment gameInfoFragment = new GameInfoFragment();
                 gameInfoFragment.setArguments(bundle);
 
-                ((MainActivity) v.getContext()).getSupportFragmentManager().beginTransaction() //add
+                ((AppActivity) v.getContext()).getSupportFragmentManager().beginTransaction() //add
                         .replace(R.id.fragment_container, gameInfoFragment).addToBackStack(null)
                         .commit();
             }
@@ -95,25 +103,26 @@ public class CatalogRecyclerViewAdapter extends RecyclerView.Adapter<CatalogRecy
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         protected void publishResults(CharSequence constraint, FilterResults results) {
             gameList.clear();
-            gameList.addAll((List) results.values);
+            gameList.addAll((List<Game>)results.values);
             notifyDataSetChanged();
         }
     };
 
     public static class SpecialViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_product_title;
-        ImageView img_product_thumbnail;
+        TextView tvGameTitle;
+        ImageView imgGameThumbnail;
         CardView cardView;
 
         public SpecialViewHolder(View itemView) {
             super(itemView);
 
-            tv_product_title = (TextView) itemView.findViewById(R.id.game_name_id);
-            img_product_thumbnail = (ImageView) itemView.findViewById(R.id.game_img_id);
-            cardView = (CardView) itemView.findViewById(R.id.cardview_id);
+            tvGameTitle = itemView.findViewById(R.id.game_name_id);
+            imgGameThumbnail = itemView.findViewById(R.id.game_img_id);
+            cardView = itemView.findViewById(R.id.cardview_id);
 
         }
 

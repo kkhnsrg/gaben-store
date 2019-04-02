@@ -1,4 +1,4 @@
-package com.kokhan.gabenstore;
+package com.kokhan.gabenstore.fragment;
 
 
 import android.os.Bundle;
@@ -15,6 +15,10 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
+import com.kokhan.gabenstore.data.DataStorage;
+import com.kokhan.gabenstore.data.Game;
+import com.kokhan.gabenstore.R;
+import com.kokhan.gabenstore.activity.AppActivity;
 
 
 /**
@@ -22,15 +26,14 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
  */
 public class GameInfoFragment extends Fragment {
 
-    private TextView tvtitle, tvdescription, tvprice, tvcount;
-    private ImageView img;
+    private TextView tvTitle, tvDescription, tvPrice, tvCount;
+    private ImageView imageView;
     private NumberPicker numberPicker;
-    private AppCompatButton btnbuy;
-
-//    CartRecyclerViewAdapter adapter;
+    private AppCompatButton btnBuy;
 
     private static final String PRICE_CONSTANT = "Price: ";
     private static final String COUNT_CONSTANT = "Count: ";
+    private static final String HAVENT_GAME_MESSAGE = "We haven't this game. Sorry :c";
 
     public GameInfoFragment() {
     }
@@ -38,24 +41,23 @@ public class GameInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final MainActivity activity = (MainActivity) getActivity();
-//        new CartRecyclerViewAdapter(getActivity(), DataStorage.getInstance().getCartGameList());
+        final AppActivity activity = (AppActivity) getActivity();
         int gamePosition = getArguments().getInt("gamePosition");
         boolean isFromCart = getArguments().getBoolean("isFromCart");
         View view = inflater.inflate(R.layout.fragment_gameinfo, container, false);
 
-        tvtitle = (TextView) view.findViewById(R.id.product_title);
-        tvdescription = (TextView) view.findViewById(R.id.product_description);
-        tvprice = (TextView) view.findViewById(R.id.product_price);
-        tvcount = (TextView) view.findViewById(R.id.product_count);
-        img = (ImageView) view.findViewById(R.id.productthumbnail);
-        btnbuy = (AppCompatButton) view.findViewById(R.id.buy_button);
-        numberPicker = (NumberPicker) view.findViewById(R.id.game_number_picker);
-        //numberPicker.setKeyboardNavigationCluster(false);
+        tvTitle = view.findViewById(R.id.game_title);
+        tvDescription = view.findViewById(R.id.game_description);
+        tvPrice = view.findViewById(R.id.game_price);
+        tvCount = view.findViewById(R.id.game_count);
+        imageView = view.findViewById(R.id.game_thumbnail);
+        btnBuy = view.findViewById(R.id.buy_button);
+        numberPicker = view.findViewById(R.id.game_number_picker);
+        numberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         final Game currentGame;
         if (isFromCart) {
-            btnbuy.setVisibility(View.GONE);
+            btnBuy.setVisibility(View.GONE);
             numberPicker.setVisibility(View.GONE);
             currentGame = DataStorage.getInstance().getCartGameList().get(gamePosition);
         } else {
@@ -73,7 +75,7 @@ public class GameInfoFragment extends Fragment {
             public void onClick(View v) {
                 if (currentGame.getCount() <= 0) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                    builder.setMessage("We haven't this game. Sorry :c");
+                    builder.setMessage(HAVENT_GAME_MESSAGE);
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
                 } else {
@@ -82,32 +84,26 @@ public class GameInfoFragment extends Fragment {
                             currentGame.getThumbnail(), addedGameCount, currentGame.getPrice());
                     DataStorage.getInstance().getCartGameList().add(addedGame);
                     currentGame.setCount(currentGame.getCount() - addedGameCount);
-                    tvcount.setText(COUNT_CONSTANT.concat(String.valueOf(currentGame.getCount())));
+                    tvCount.setText(COUNT_CONSTANT.concat(String.valueOf(currentGame.getCount())));
                     AHBottomNavigation navigation = (AHBottomNavigation) activity.findViewById(R.id.bottom_navigation);
                     navigation.setNotification(DataStorage.getInstance().getCartGameList().size(), 1);
                     setNumberPickerValue(currentGame.getCount());
-                    //adapter.notifyDataSetChanged();
                 }
             }
         };
-        btnbuy.setOnClickListener(onClickListenerBuyBtn);
+        btnBuy.setOnClickListener(onClickListenerBuyBtn);
 
-
-        tvtitle.setText(title);
-        tvdescription.setText(description);
-        tvcount.setText(COUNT_CONSTANT.concat(String.valueOf(count)));
-        tvprice.setText(PRICE_CONSTANT.concat(String.valueOf(price).concat("$")));
-        img.setImageResource(image);
+        tvTitle.setText(title);
+        tvDescription.setText(description);
+        tvCount.setText(COUNT_CONSTANT.concat(String.valueOf(count)));
+        tvPrice.setText(PRICE_CONSTANT.concat(String.valueOf(price).concat("$")));
+        imageView.setImageResource(image);
         numberPicker.setMinValue(1);
         setNumberPickerValue(currentGame.getCount());
         return view;
     }
 
     private void setNumberPickerValue(int gameCount) {
-        if (gameCount == 0) {
-            numberPicker.setMaxValue(1);
-        } else {
-            numberPicker.setMaxValue(gameCount);
-        }
+        numberPicker.setMaxValue(gameCount == 0 ? 1 : gameCount);
     }
 }

@@ -1,4 +1,4 @@
-package com.kokhan.gabenstore;
+package com.kokhan.gabenstore.adapter;
 
 import android.graphics.Canvas;
 import android.view.View;

@@ -1,4 +1,4 @@
-package com.kokhan.gabenstore;
+package com.kokhan.gabenstore.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,6 +9,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.kokhan.gabenstore.data.DataStorage;
+import com.kokhan.gabenstore.data.Game;
+import com.kokhan.gabenstore.fragment.GameInfoFragment;
+import com.kokhan.gabenstore.R;
+import com.kokhan.gabenstore.activity.AppActivity;
+
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -16,12 +22,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerViewAdapter.SpecialViewHolder> {
 
-    private Context mContext;
-    private List<Game> mData;
+    private static String FINAL_PRICE = "Final price: ";
+    private static String GAME_POSITION = "gamePosition";
+    private static String IS_FROM_CART = "isFromCart";
 
-    public CartRecyclerViewAdapter(Context mContext, List<Game> mData) {
-        this.mContext = mContext;
-        this.mData = mData;
+    private List<Game> cartGamesList;
+
+    public CartRecyclerViewAdapter(List<Game> cartGamesList) {
+        this.cartGamesList = cartGamesList;
     }
 
     @NonNull
@@ -34,24 +42,24 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
 
     @Override
     public void onBindViewHolder(@NonNull final SpecialViewHolder holder, final int position) {
-        Game game = mData.get(position);
-        holder.tv_game_name.setText(game.getTitle());
-        holder.img_game_thumbnail.setImageResource(game.getThumbnail());
+        Game game = cartGamesList.get(position);
+        holder.tvGameName.setText(game.getTitle());
+        holder.imgGameThumbnail.setImageResource(game.getThumbnail());
         int finalPrice = game.getCount() * game.getPrice();
-        holder.tv_game_price.setText("Final price: ".concat(String.valueOf(finalPrice)).concat("$"));
+        holder.tvGamePrice.setText(FINAL_PRICE.concat(String.valueOf(finalPrice)).concat("$"));
 
         holder.viewForeground.setOnClickListener(new View.OnClickListener() {
             //lambda
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("gamePosition", position);
-                bundle.putBoolean("isFromCart", true);
+                bundle.putInt(GAME_POSITION, position);
+                bundle.putBoolean(IS_FROM_CART, true);
 
                 GameInfoFragment gameInfoFragment = new GameInfoFragment();
                 gameInfoFragment.setArguments(bundle);
 
-                ((MainActivity) v.getContext()).getSupportFragmentManager().beginTransaction()
+                ((AppActivity) v.getContext()).getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, gameInfoFragment).addToBackStack(null)
                         .commit();
             }
@@ -60,33 +68,40 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
     }
 
     public void removeItem(int position){
-        Game removedGame = mData.get(position);
-        DataStorage.getInstance().addExistingGameToCatalog(removedGame);
-        mData.remove(removedGame);
+        Game removedGame = cartGamesList.get(position);
+        addExistingGameToCatalog(removedGame);
+        cartGamesList.remove(removedGame);
         notifyItemRemoved(position);
+    }
+
+    private void addExistingGameToCatalog(Game game) {
+        for (Game currentGame : DataStorage.getInstance().getCatalogGameList()) {
+            if (currentGame.getTitle().equals(game.getTitle())) {
+                currentGame.setCount(currentGame.getCount() + game.getCount());
+                break;
+            }
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return cartGamesList.size();
     }
 
     public static class SpecialViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_game_name, tv_game_price;
-        ImageView img_game_thumbnail;
+        TextView tvGameName, tvGamePrice;
+        ImageView imgGameThumbnail;
         RelativeLayout viewBackground, viewForeground;
 
         public SpecialViewHolder(View itemView) {
             super(itemView);
 
-            tv_game_name = (TextView) itemView.findViewById(R.id.cart_game_name);
-            tv_game_price = (TextView) itemView.findViewById(R.id.cart_game_price);
-            img_game_thumbnail = (ImageView) itemView.findViewById(R.id.cart_game_picture);
-            viewBackground = (RelativeLayout) itemView.findViewById(R.id.cart_background);
-            viewForeground = (RelativeLayout) itemView.findViewById(R.id.cart_view_foreground);
+            tvGameName = itemView.findViewById(R.id.cart_game_name);
+            tvGamePrice = itemView.findViewById(R.id.cart_game_price);
+            imgGameThumbnail = itemView.findViewById(R.id.cart_game_picture);
+            viewBackground = itemView.findViewById(R.id.cart_background);
+            viewForeground = itemView.findViewById(R.id.cart_view_foreground);
         }
-
-
     }
 }

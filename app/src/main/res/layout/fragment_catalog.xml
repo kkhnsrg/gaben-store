@@ -2,13 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CatalogFragment">
+    tools:context=".fragment.CatalogFragment">
 
-    <!--<EditText-->
-        <!--android:id="@+id/search_field"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:autofillHints="Search" />-->
+    <TextView
+        android:id="@+id/empty_search_result"
+        android:textColor="#2d2d2d"
+        android:textSize="25sp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:text="@string/title_empty_search_result"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/catalog_recyclerview_id"
