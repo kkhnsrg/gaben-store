@@ -48,23 +48,19 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
         int finalPrice = game.getCount() * game.getPrice();
         holder.tvGamePrice.setText(FINAL_PRICE.concat(String.valueOf(finalPrice)).concat("$"));
 
-        holder.viewForeground.setOnClickListener(new View.OnClickListener() {
-            //lambda
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putInt(GAME_POSITION, position);
-                bundle.putBoolean(IS_FROM_CART, true);
+        //lambda
+        holder.viewForeground.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putInt(GAME_POSITION, position);
+            bundle.putBoolean(IS_FROM_CART, true);
 
-                GameInfoFragment gameInfoFragment = new GameInfoFragment();
-                gameInfoFragment.setArguments(bundle);
+            GameInfoFragment gameInfoFragment = new GameInfoFragment();
+            gameInfoFragment.setArguments(bundle);
 
-                ((AppActivity) v.getContext()).getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, gameInfoFragment).addToBackStack(null)
-                        .commit();
-            }
+            ((AppActivity) v.getContext()).getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, gameInfoFragment).addToBackStack(null)
+                    .commit();
         });
-
     }
 
     public void removeItem(int position){

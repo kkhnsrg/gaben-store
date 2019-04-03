@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.kokhan.gabenstore.data.DataStorage;
 import com.kokhan.gabenstore.data.Game;
 import com.kokhan.gabenstore.R;
@@ -49,12 +48,12 @@ public class CartFragment extends Fragment implements RecyclerItemTouchHelperLis
         activity = (AppActivity) getActivity();
         gameList = DataStorage.getInstance().getCartGameList();
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.cart_recyclerview_id);
-        tvEmptyCart = (TextView) view.findViewById(R.id.empty_cart_view);
+        recyclerView = view.findViewById(R.id.cart_recyclerview_id);
+        tvEmptyCart = view.findViewById(R.id.empty_cart_view);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL));
         adapter = new CartRecyclerViewAdapter(gameList);
         recyclerView.setAdapter(adapter);
 
@@ -72,8 +71,7 @@ public class CartFragment extends Fragment implements RecyclerItemTouchHelperLis
             int deleteIndex = viewHolder.getAdapterPosition();
             adapter.removeItem(deleteIndex);
             cartEntityCheck();
-            AHBottomNavigation navigation = (AHBottomNavigation) activity.findViewById(R.id.bottom_navigation);
-            navigation.setNotification(DataStorage.getInstance().getCartGameList().size(), 1);
+            activity.setNotificationBadgeValue();
         }
     }
 

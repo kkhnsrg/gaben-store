@@ -6,11 +6,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.kokhan.gabenstore.fragment.CartFragment;
 import com.kokhan.gabenstore.fragment.CatalogFragment;
 import com.kokhan.gabenstore.data.DataStorage;
@@ -18,6 +18,7 @@ import com.kokhan.gabenstore.R;
 
 public class AppActivity extends AppCompatActivity {
 
+    AHBottomNavigation bottomNavigation;
     CatalogFragment catalogFragment;
     CartFragment cartFragment;
 
@@ -35,8 +36,8 @@ public class AppActivity extends AppCompatActivity {
     }
 
     @SuppressLint("ResourceAsColor")
-    private void setupBottomNavigation(){
-        AHBottomNavigation bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
+    private void setupBottomNavigation() {
+        bottomNavigation = findViewById(R.id.bottom_navigation);
 
         AHBottomNavigationItem item1 = new AHBottomNavigationItem("Catalog", R.drawable.ic_dashboard_black_24dp);
         AHBottomNavigationItem item2 = new AHBottomNavigationItem("Cart", R.drawable.ic_shopping_cart_black_24dp);
@@ -45,21 +46,13 @@ public class AppActivity extends AppCompatActivity {
         bottomNavigation.addItem(item2);
 
         bottomNavigation.setColored(true);
-
-        bottomNavigation.setDefaultBackgroundColor(R.color.colorPrimary);
-
-        bottomNavigation.setInactiveColor(Color.parseColor("#747474"));
-
         bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_HIDE);
-
         bottomNavigation.setCurrentItem(0);
-
-        bottomNavigation.setNotification(DataStorage.getInstance().getCartGameList().size(), 1);
-
+        setNotificationBadgeValue();
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
             public boolean onTabSelected(int position, boolean wasSelected) {
-                switch (position){
+                switch (position) {
                     case 0:
                         setFragment(catalogFragment);
                         break;
@@ -72,7 +65,13 @@ public class AppActivity extends AppCompatActivity {
         });
     }
 
-    public void setFragment(Fragment fragment){
+    public void setNotificationBadgeValue() {
+        AHNotification notification = new AHNotification.Builder()
+                .setText(String.valueOf(DataStorage.getInstance().getCartGameList().size())).build();
+        bottomNavigation.setNotification(notification, 1);
+    }
+
+    public void setFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.popBackStack();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

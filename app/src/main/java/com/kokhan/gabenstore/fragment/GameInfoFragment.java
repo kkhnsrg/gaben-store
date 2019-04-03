@@ -3,6 +3,7 @@ package com.kokhan.gabenstore.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
+import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.kokhan.gabenstore.data.DataStorage;
 import com.kokhan.gabenstore.data.Game;
 import com.kokhan.gabenstore.R;
@@ -26,6 +28,7 @@ import com.kokhan.gabenstore.activity.AppActivity;
  */
 public class GameInfoFragment extends Fragment {
 
+    private AppActivity activity;
     private TextView tvTitle, tvDescription, tvPrice, tvCount;
     private ImageView imageView;
     private NumberPicker numberPicker;
@@ -39,9 +42,10 @@ public class GameInfoFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final AppActivity activity = (AppActivity) getActivity();
+        activity = (AppActivity) getActivity();
+        assert getArguments() != null;
         int gamePosition = getArguments().getInt("gamePosition");
         boolean isFromCart = getArguments().getBoolean("isFromCart");
         View view = inflater.inflate(R.layout.fragment_gameinfo, container, false);
@@ -59,6 +63,7 @@ public class GameInfoFragment extends Fragment {
         if (isFromCart) {
             btnBuy.setVisibility(View.GONE);
             numberPicker.setVisibility(View.GONE);
+            //TODO fix bug with delete
             currentGame = DataStorage.getInstance().getCartGameList().get(gamePosition);
         } else {
             currentGame = DataStorage.getInstance().getCatalogGameList().get(gamePosition);
@@ -85,8 +90,7 @@ public class GameInfoFragment extends Fragment {
                     DataStorage.getInstance().getCartGameList().add(addedGame);
                     currentGame.setCount(currentGame.getCount() - addedGameCount);
                     tvCount.setText(COUNT_CONSTANT.concat(String.valueOf(currentGame.getCount())));
-                    AHBottomNavigation navigation = (AHBottomNavigation) activity.findViewById(R.id.bottom_navigation);
-                    navigation.setNotification(DataStorage.getInstance().getCartGameList().size(), 1);
+                    activity.setNotificationBadgeValue();
                     setNumberPickerValue(currentGame.getCount());
                 }
             }

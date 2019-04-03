@@ -51,21 +51,17 @@ public class CatalogRecyclerViewAdapter extends RecyclerView.Adapter<CatalogRecy
         holder.tvGameTitle.setText(gameList.get(position).getTitle());
         holder.imgGameThumbnail.setImageResource(gameList.get(position).getThumbnail());
 
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            //lambda
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putInt(GAME_POSITION, position);
-                bundle.putBoolean(IS_FROM_CART, false);
+        holder.cardView.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putInt(GAME_POSITION, position);
+            bundle.putBoolean(IS_FROM_CART, false);
 
-                GameInfoFragment gameInfoFragment = new GameInfoFragment();
-                gameInfoFragment.setArguments(bundle);
+            GameInfoFragment gameInfoFragment = new GameInfoFragment();
+            gameInfoFragment.setArguments(bundle);
 
-                ((AppActivity) v.getContext()).getSupportFragmentManager().beginTransaction() //add
-                        .replace(R.id.fragment_container, gameInfoFragment).addToBackStack(null)
-                        .commit();
-            }
+            ((AppActivity) v.getContext()).getSupportFragmentManager().beginTransaction() //add
+                    .replace(R.id.fragment_container, gameInfoFragment).addToBackStack(null)
+                    .commit();
         });
 
     }
@@ -119,12 +115,9 @@ public class CatalogRecyclerViewAdapter extends RecyclerView.Adapter<CatalogRecy
 
         public SpecialViewHolder(View itemView) {
             super(itemView);
-
             tvGameTitle = itemView.findViewById(R.id.game_name_id);
             imgGameThumbnail = itemView.findViewById(R.id.game_img_id);
             cardView = itemView.findViewById(R.id.cardview_id);
-
         }
-
     }
 }
