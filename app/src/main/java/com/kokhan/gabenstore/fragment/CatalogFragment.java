@@ -40,9 +40,7 @@ public class CatalogFragment extends Fragment {
                              Bundle savedInstanceState) {
         List<Game> gameList = DataStorage.getInstance().getCatalogGameList();
         View view = inflater.inflate(R.layout.fragment_catalog, container, false);
-        //    private TextView tvEmptySearch;
         RecyclerView recyclerView = view.findViewById(R.id.catalog_recyclerview_id);
-//        tvEmptySearch = (TextView) view.findViewById(R.id.empty_search_result);
         adapter = new CatalogRecyclerViewAdapter(this.getContext(), gameList);
         recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 3));
         recyclerView.setAdapter(adapter);
@@ -63,7 +61,6 @@ public class CatalogFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //emptysearch show
                 adapter.getFilter().filter(newText);
                 return false;
             }

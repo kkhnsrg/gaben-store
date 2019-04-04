@@ -1,6 +1,5 @@
 package com.kokhan.gabenstore.adapter;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +47,6 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
         int finalPrice = game.getCount() * game.getPrice();
         holder.tvGamePrice.setText(FINAL_PRICE.concat(String.valueOf(finalPrice)).concat("$"));
 
-        //lambda
         holder.viewForeground.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putInt(GAME_POSITION, position);
@@ -63,7 +61,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
         });
     }
 
-    public void removeItem(int position){
+    public void removeItem(int position) {
         Game removedGame = cartGamesList.get(position);
         addExistingGameToCatalog(removedGame);
         cartGamesList.remove(removedGame);

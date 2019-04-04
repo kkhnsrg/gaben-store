@@ -75,24 +75,21 @@ public class GameInfoFragment extends Fragment {
         int count = currentGame.getCount();
         int image = currentGame.getThumbnail();
 
-        View.OnClickListener onClickListenerBuyBtn = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentGame.getCount() <= 0) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                    builder.setMessage(HAVENT_GAME_MESSAGE);
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                } else {
-                    int addedGameCount = numberPicker.getValue();
-                    Game addedGame = new Game(currentGame.getTitle(), currentGame.getDescription(),
-                            currentGame.getThumbnail(), addedGameCount, currentGame.getPrice());
-                    DataStorage.getInstance().getCartGameList().add(addedGame);
-                    currentGame.setCount(currentGame.getCount() - addedGameCount);
-                    tvCount.setText(COUNT_CONSTANT.concat(String.valueOf(currentGame.getCount())));
-                    activity.setNotificationBadgeValue();
-                    setNumberPickerValue(currentGame.getCount());
-                }
+        View.OnClickListener onClickListenerBuyBtn = v -> {
+            if (currentGame.getCount() <= 0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setMessage(HAVENT_GAME_MESSAGE);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            } else {
+                int addedGameCount = numberPicker.getValue();
+                Game addedGame = new Game(currentGame.getTitle(), currentGame.getDescription(),
+                        currentGame.getThumbnail(), addedGameCount, currentGame.getPrice());
+                DataStorage.getInstance().getCartGameList().add(addedGame);
+                currentGame.setCount(currentGame.getCount() - addedGameCount);
+                tvCount.setText(COUNT_CONSTANT.concat(String.valueOf(currentGame.getCount())));
+                activity.setNotificationBadgeValue();
+                setNumberPickerValue(currentGame.getCount());
             }
         };
         btnBuy.setOnClickListener(onClickListenerBuyBtn);

@@ -49,19 +49,16 @@ public class AppActivity extends AppCompatActivity {
         bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_HIDE);
         bottomNavigation.setCurrentItem(0);
         setNotificationBadgeValue();
-        bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
-            @Override
-            public boolean onTabSelected(int position, boolean wasSelected) {
-                switch (position) {
-                    case 0:
-                        setFragment(catalogFragment);
-                        break;
-                    case 1:
-                        setFragment(cartFragment);
-                        break;
-                }
-                return true;
+        bottomNavigation.setOnTabSelectedListener((position, wasSelected) -> {
+            switch (position) {
+                case 0:
+                    setFragment(catalogFragment);
+                    break;
+                case 1:
+                    setFragment(cartFragment);
+                    break;
             }
+            return true;
         });
     }
 

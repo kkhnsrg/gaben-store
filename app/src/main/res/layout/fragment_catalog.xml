@@ -4,16 +4,6 @@
     android:layout_height="match_parent"
     tools:context=".fragment.CatalogFragment">
 
-    <TextView
-        android:id="@+id/empty_search_result"
-        android:textColor="#2d2d2d"
-        android:textSize="25sp"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:text="@string/title_empty_search_result"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/catalog_recyclerview_id"
         android:layout_width="match_parent"

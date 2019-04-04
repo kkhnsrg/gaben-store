@@ -63,7 +63,6 @@ public class CatalogRecyclerViewAdapter extends RecyclerView.Adapter<CatalogRecy
                     .replace(R.id.fragment_container, gameInfoFragment).addToBackStack(null)
                     .commit();
         });
-
     }
 
     @Override
@@ -87,7 +86,7 @@ public class CatalogRecyclerViewAdapter extends RecyclerView.Adapter<CatalogRecy
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
                 for(Game game : gameListFull) {
-                    if(game.getTitle().toLowerCase().contains(filterPattern)) { //mb startwith
+                    if(game.getTitle().toLowerCase().contains(filterPattern)) {
                         filteredList.add(game);
                     }
                 }
